@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Task Manager – Kevin März</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      color: #fff;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+
+    /* Formular */
+    .add-form {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .add-form input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #1a1d27;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .add-form input:focus {
+      border-color: #3ecf8e;
+    }
+
+    .add-form button {
+      padding: 0.75rem 1.5rem;
+      background: #3ecf8e;
+      color: #000;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: opacity .2s;
+    }
+
+    .add-form button:hover { opacity: 0.85; }
+
+    /* Task Liste */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1a1d27;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      transition: border-color .2s;
+    }
+
+    .task-item:hover { border-color: rgba(255,255,255,0.15); }
+
+    .task-item.done { opacity: 0.45; }
+
+    .task-title {
+      font-size: 1rem;
+      color: #e2e8f0;
+    }
+
+    .task-item.done .task-title {
+      text-decoration: line-through;
+      color: #6b7280;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-done, .btn-delete {
+      padding: 0.4rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity .2s;
+    }
+
+    .btn-done {
+      background: rgba(62,207,142,0.15);
+      color: #3ecf8e;
+      border: 1px solid rgba(62,207,142,0.3);
+    }
+
+    .btn-delete {
+      background: rgba(239,68,68,0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239,68,68,0.2);
+    }
+
+    .btn-done:hover, .btn-delete:hover { opacity: 0.7; }
+
+    .empty {
+      text-align: center;
+      color: #6b7280;
+      padding: 3rem;
+      font-size: 0.95rem;
+    }
+
+    .counter {
+      font-size: 0.82rem;
+      color: #6b7280;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>Meine Aufgaben</h1>
+    <p class="subtitle">Task Manager – Kevin März</p>
+
+    <!-- Formular zum Hinzufügen -->
+    <form class="add-form" action="/add" method="POST">
+      <input 
+        type="text" 
+        name="title" 
+        placeholder="Neue Aufgabe eingeben..." 
+        required 
+        autofocus
+      />
+      <button type="submit">+ Hinzufügen</button>
+    </form>
+
+    <!-- Aufgabenzähler -->
+    <p class="counter">{{ tasks|length }} Aufgabe(n) insgesamt</p>
+
+    <!-- Aufgabenliste -->
+    <div class="task-list">
+      {% if tasks %}
+        {% for task in tasks %}
+          <div class="task-item {% if task['done'] %}done{% endif %}">
+            <span class="task-title">{{ task['title'] }}</span>
+            <div class="task-actions">
+              {% if not task['done'] %}
+                <a href="/done/{{ task['id'] }}" class="btn-done">✓ Erledigt</a>
+              {% endif %}
+              <a href="/delete/{{ task['id'] }}" class="btn-delete">✕ Löschen</a>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="empty">Noch keine Aufgaben. Füge deine erste hinzu! 👆</p>
+      {% endif %}
+    </div>
+
+  </div>
+</body>
+</html>
