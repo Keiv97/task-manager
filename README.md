@@ -43,12 +43,15 @@ Eine einfache Web-App zur Aufgabenverwaltung – gebaut mit Python, Flask und SQ
 5. Browser öffnen: `http://localhost:5000`
 
 ## Projektstruktur
+
+```
 task-manager/
 ├── app.py              # Server & Routen
 ├── templates/
 │   └── index.html      # Frontend
 ├── static/             # CSS & Assets
 └── README.md
+```
 
 ## Über den Entwickler
 
